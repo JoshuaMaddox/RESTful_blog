@@ -59,6 +59,26 @@ app.get("/blogs", function(req, res){
     
 });
 
+//The NEW route that renders the form to add in new DB entry
+app.get("/blogs/new", function(req, res){
+    res.render("new")
+});
+
+//The CREATE route the sends the form data to the DB
+app.post("/blogs", function(req, res){
+    //CREATE the DB Entry
+    // .create(data, callback)
+    //data is referenced by req.body. and then whatever name we used in our form's name="" attribute in the new.ejs file
+    Blog.create(req.body.blog, function(err, newBlog){
+        if(err){
+            //MUST HANDLE THIS ERROR - CHANGE ME************
+            res.render("new");
+        } else {
+            //Redirect to /index 
+            res.redirect("/blogs");
+        }
+    }); 
+});
 
 
 
