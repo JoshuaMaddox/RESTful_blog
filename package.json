@@ -1,0 +1,34 @@
+{
+  "name": "simple_blog",
+  "version": "1.0.0",
+  "description": "A simple blog to demo RESTful Routing",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoshuaMaddox/RESTful_blog.git"
+  },
+  "keywords": [
+    "blog",
+    "RESTful",
+    "MEAN",
+    "Node.js",
+    "MongoDB",
+    "Mongoose",
+    "Express"
+  ],
+  "author": "Joshua Maddox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JoshuaMaddox/RESTful_blog/issues"
+  },
+  "homepage": "https://github.com/JoshuaMaddox/RESTful_blog#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "ejs": "^2.5.1",
+    "express": "^4.14.0",
+    "mongoose": "^4.5.8"
+  }
+}
