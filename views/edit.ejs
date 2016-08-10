@@ -1,0 +1,27 @@
+<% include ./partials/header %>
+
+    <div class="ui main text container segment">   
+        <div class="ui huge header">Edit <%= blog.title %></div>
+        <!--HTML can't yet handle PUT requests so we use Method Override and add the hack "?_method=PUT"-->
+        <!--at the end of the action URL to submit a PUT instead of POST. If we were to put PUT in the method-->
+        <!--then we would default to GET. be sure to " npm install method-override --save " then require it-->
+        <form class="ui form" action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
+            <div class="field">
+                <label>Title</label>
+                <input type="text" name="blog[title]" value="<%= blog.title %>">
+            </div>
+            <div class="field">
+                <label>Image</label>
+                <input type="text" name="blog[image]" value="<%= blog.image %>">
+            </div>
+            <div class="field">
+                <label>Article Body</label>
+                <textarea  name="blog[body]"><%= blog.body %></textarea>
+            </div>
+            <div class="field">
+                <input class="ui teal big button" type="submit">
+            </div>
+        </form>
+    </div>
+   
+<% include ./partials/footer %>
