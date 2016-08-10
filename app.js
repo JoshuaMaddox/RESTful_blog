@@ -2,10 +2,11 @@
    |     |     REQs
 ======================================================*/
 
-var bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    express     = require("express"),
-    app         = express();
+var methodOverride  = require("method-override"),
+    bodyParser      = require("body-parser"),
+    mongoose        = require("mongoose"),
+    express         = require("express"),
+    app             = express();
     
 /*======================================================
    |     |     APP CONFIG
@@ -19,6 +20,8 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 //Using body parser to help turn JSON into js objects
 app.use(bodyParser.urlencoded({extended: true}));
+//Using method-override then pass in an argument that tells MO what to look for in the URL
+app.use(methodOverride("_method"))
 
 /*======================================================
    |     |     MONGO/MONGOOSE CONFIG
@@ -42,6 +45,10 @@ app.get("/", function(req, res){
     res.redirect("/blogs");
 })
 
+/*======================================================
+   |     |    INDEX ROUTE
+======================================================*/
+
 
 //The INDEX route that pulls from index.ejs
 app.get("/blogs", function(req, res){
@@ -58,6 +65,11 @@ app.get("/blogs", function(req, res){
     });
     
 });
+
+/*======================================================
+   |     |   NEW & CREAYE ROUTES
+======================================================*/
+
 
 //The NEW route that renders the form to add in new DB entry
 app.get("/blogs/new", function(req, res){
@@ -80,9 +92,61 @@ app.post("/blogs", function(req, res){
     }); 
 });
 
+/*======================================================
+   |     |  SHOW ROUTE
+======================================================*/
+
+app.get("/blogs/:id", function(req, res){
+    //Uses the findById mongoose method and then passes in the id from :id to req.params.id
+    //Stores the DB entry intot the callback var foundBlog which gets passed into 
+    //the else statement's res.render's object. the key name "blog" could be anything
+    Blog.findById(req.params.id, function(err, foundBlog){
+        if(err){
+             //MUST HANDLE THIS ERROR - CHANGE ME************
+            res.redirect("/blogs");
+        } else {
+            res.render("show", {blog: foundBlog});
+        }
+    });
+});
+
+/*======================================================
+   |     |  EDIT ROUTE
+======================================================*/
+
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function(err, foundBlog){
+       if(err){
+            //MUST HANDLE THIS ERROR - CHANGE ME************
+            res.redirect("/blogs");
+       } else {
+           //Use the blog key to pass the edit information
+           //to the edit.ejs file.
+           res.render("edit", {blog: foundBlog});
+       }
+    });
+});
+
+/*======================================================
+   |     |  UPDATE ROUTE
+======================================================*/
+
+app.put("/blogs/:id", function(req, res){
+    //takes 3 arguements (id, newData, callback)
+    //newData should be called whatever we called the data in our form in the edit.ejs file
+    //In this case it is blog, so req.body.blog
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+        if(err){
+            //MUST HANDLE THIS ERROR - CHANGE ME************
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs/" + req.params.id);
+        }
+    }) 
+});
 
 
 //Starts express and confirms the server has started
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("Blog server has started");
+    console.log("Blog Server Has Started")
 });
