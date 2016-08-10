@@ -1,17 +1,38 @@
 <% include ./partials/header %>
+<div class="ui main text container">
+    <div class="ui huge header">
+        <h1>RESTful Routes Blog</h1>
+        <div class="ui top attached segment">
+            <div class="ui divided items">
+               <% blogs.forEach(function(blog){ %>
+                   <div class="item">
+                       <div class="image">
+                            <img src="<%= blog.image %>">  
+                       </div>
+                       <div class="content">
+                            <a class="header" href="/blogs/<%= blog._id %>"><%= blog.title %></a>
+                            <div class="meta">
+                                <!--The .substring method limites the number of characters show to the parameters set-->
+                                <!--in this case, 0,100-->
+                                <span><%= blog.created.toDateString() %></span> 
+                            </div>
+                            <div class="description">
+                                <p><%- blog.body.substring(0, 100) %>...</p> 
+                           </div>
+                           <div class="extra">
+                                <!--pass in the blog._id passed in through the blog var in the forEach function-->
+                                <a class="ui floated teal big button" href="/blogs/<%= blog._id %>">Read More</a>
+                           </div>
+                       </div>
+                   </div>
+                <% }); %> 
+            </div>
+        </div>
+    </div>
+</div>
 
-<h1>Index Page</h1>
 
 
-<% blogs.forEach(function(blog){ %>
-    <h2><%= blog.title %></h2>
-    <img src="<%= blog.image %>">
-    <span><%= blog.created.toDateString() %></span>
-    <!--The .substring method limites the number of characters show to the parameters set-->
-    <!--in this case, 0,100-->
-    <p><%= blog.body.substring(0, 100) %>...</p>
-    <!--pass in the blog._id passed in through the blog var in the forEach function-->
-    <a class="ui teal big button" href="/blogs/<%= blog._id %>">Read More</a>
-<% }); %>
+
 
 <% include ./partials/footer %>

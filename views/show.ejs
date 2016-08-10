@@ -11,6 +11,12 @@
             <div class="content">
               <p><%- blog.body %></p>  
             </div>
+            <!--Using method-override to change the POST request to a delete request
+            ?_method=DELETE-->
+            <a class="ui teal big button" href="/blogs/<%=blog._id %>/edit">Edit</a>
+            <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+                <button class="ui red big button">Delete</button>
+            </form>
         </div>
     </div>
    

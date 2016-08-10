@@ -2,11 +2,12 @@
    |     |     REQs
 ======================================================*/
 
-var methodOverride  = require("method-override"),
-    bodyParser      = require("body-parser"),
-    mongoose        = require("mongoose"),
-    express         = require("express"),
-    app             = express();
+var expressSanitizer    = require("express-sanitizer"),
+    methodOverride      = require("method-override"),
+    bodyParser          = require("body-parser"),
+    mongoose            = require("mongoose"),
+    express             = require("express"),
+    app                 = express();
     
 /*======================================================
    |     |     APP CONFIG
@@ -22,6 +23,8 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 //Using method-override then pass in an argument that tells MO what to look for in the URL
 app.use(methodOverride("_method"))
+//Using expressSanitizer
+app.use(expressSanitizer());
 
 /*======================================================
    |     |     MONGO/MONGOOSE CONFIG
@@ -67,7 +70,7 @@ app.get("/blogs", function(req, res){
 });
 
 /*======================================================
-   |     |   NEW & CREAYE ROUTES
+   |     |   NEW & CREATE ROUTES
 ======================================================*/
 
 
@@ -81,6 +84,7 @@ app.post("/blogs", function(req, res){
     //CREATE the DB Entry
     // .create(data, callback)
     //data is referenced by req.body. and then whatever name we used in our form's name="" attribute in the new.ejs file
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.create(req.body.blog, function(err, newBlog){
         if(err){
             //MUST HANDLE THIS ERROR - CHANGE ME************
@@ -135,6 +139,7 @@ app.put("/blogs/:id", function(req, res){
     //takes 3 arguements (id, newData, callback)
     //newData should be called whatever we called the data in our form in the edit.ejs file
     //In this case it is blog, so req.body.blog
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
         if(err){
             //MUST HANDLE THIS ERROR - CHANGE ME************
@@ -143,6 +148,21 @@ app.put("/blogs/:id", function(req, res){
             res.redirect("/blogs/" + req.params.id);
         }
     }) 
+});
+
+/*======================================================
+   |     |    DESTROY ROUTE
+======================================================*/
+
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndRemove(req.params.id, function(err){
+       if(err){
+           //MUST HANDLE THIS ERROR - CHANGE ME************
+            res.redirect("/blogs");
+       } else {
+           res.redirect("/blogs");
+       }
+    });
 });
 
 
