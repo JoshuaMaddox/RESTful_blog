@@ -6,8 +6,12 @@
 <% blogs.forEach(function(blog){ %>
     <h2><%= blog.title %></h2>
     <img src="<%= blog.image %>">
-    <span><%= blog.created%></span>
-    <p><%= blog.body %></p>
+    <span><%= blog.created.toDateString() %></span>
+    <!--The .substring method limites the number of characters show to the parameters set-->
+    <!--in this case, 0,100-->
+    <p><%= blog.body.substring(0, 100) %>...</p>
+    <!--pass in the blog._id passed in through the blog var in the forEach function-->
+    <a class="ui teal big button" href="/blogs/<%= blog._id %>">Read More</a>
 <% }); %>
 
 <% include ./partials/footer %>
